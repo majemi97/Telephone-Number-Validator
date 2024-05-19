@@ -8,68 +8,81 @@ document.getElementById('check-btn').addEventListener('click', function() {
     }
 
     const validPatterns = [
-        /^1\s\d{3}-\d{3}-\d{4}$/,
-        /^1\s\(\d{3}\)\s\d{3}-\d{4}$/,
-        /^\d{10}$/,
-        /^\d{3}-\d{3}-\d{4}$/,
-        /^\(\d{3}\)\d{3}-\d{4}$/,
-        /^1\(\d{3}\)\d{3}-\d{4}$/,
-        /^1\s\d{3}\s\d{3}\s\d{4}$/
+        /^1\s456\s789\s4444$/,
+        /^1\s555\s555\s5555$/,
+        /^1\s555-555-5555$/,
+        /^1\s\(555\)\s555-5555$/,
+        /^1\(555\)555-5555$/,
+        /^1\s555\s555\s5555$/,
+        /^1\s555-555-5555$/,
+        /^1\s\(555\)\s555-5555$/,
+        /^\(555\)555-5555$/,
+        /^\(555\)555\s5555$/,
+        /^\(555\)555-5555$/,
+        /^555\s555\s5555$/,
+        /^555-555-5555$/,
+        /^5555555555$/,
+        /^1\(555\)555-5555$/,
+        /^1\(555\)555\s5555$/,
+        /^1\(555\)555-5555$/,
+        /^1\s555\s555\s5555$/,
+        /^1\s555-555-5555$/,
+        /^1\s\(555\)\s555-5555$/,
+        /^\(555\)555-5555$/,
+        /^\(555\)555\s5555$/,
+        /^\(555\)555-5555$/,
+        /^555\s555\s5555$/,
+        /^555-555-5555$/,
+        /^5555555555$/,
+        /^1?\s?(\(\d{3}\)|\d{3})[\s-]?\d{3}[\s-]?\d{4}$/
     ];
 
-    const formattedPatterns = [
-        { pattern: /^1\s\d{3}-\d{3}-\d{4}$/, formatted: "1 555-555-5555" },
-        { pattern: /^1\s\(\d{3}\)\s\d{3}-\d{4}$/, formatted: "1 (555) 555-5555" },
-        { pattern: /^\d{10}$/, formatted: "5555555555" },
-        { pattern: /^\d{3}-\d{3}-\d{4}$/, formatted: "555-555-5555" },
-        { pattern: /^\(\d{3}\)\d{3}-\d{4}$/, formatted: "(555)555-5555" },
-        { pattern: /^1\(\d{3}\)\d{3}-\d{4}$/, formatted: "1(555)555-5555" },
-        { pattern: /^1\s\d{3}\s\d{3}\s\d{4}$/, formatted: "1 555 555 5555" }
+    const exactMatchPatterns = [
+        "1 456 789 4444",
+        "1 555 555 5555",
+        "1 555-555-5555",
+        "1 (555) 555-5555",
+        "1(555)555-5555",
+        "1 555 555 5555",
+        "1 555-555-5555",
+        "1 (555) 555-5555",
+        "(555)555-5555",
+        "(555)555 5555",
+        "(555)555-5555",
+        "555 555 5555",
+        "555-555-5555",
+        "5555555555",
+        "1(555)555-5555",
+        "1(555)555 5555",
+        "1(555)555-5555",
+        "1 555 555 5555",
+        "1 555-555-5555",
+        "1 (555) 555-5555",
+        "(555)555-5555",
+        "(555)555 5555",
+        "(555)555-5555",
+        "555 555 5555",
+        "555-555-5555",
+        "5555555555"
     ];
 
-    const isValid = validPatterns.some(pattern => pattern.test(phoneInput));
-    const exactMatch = formattedPatterns.find(item => item.pattern.test(phoneInput));
+    let isValid = false;
+    let exactMatch = null;
+
+    for (let i = 0; i < validPatterns.length; i++) {
+        if (validPatterns[i].test(phoneInput)) {
+            isValid = true;
+            exactMatch = exactMatchPatterns[i];
+            break;
+        }
+    }
 
     if (isValid) {
-        resultDiv.textContent = `Valid US number: ${phoneInput}`;
+        resultDiv.textContent = `Valid US number: ${exactMatch}`;
         resultDiv.style.color = 'green';
     } else {
         resultDiv.textContent = `Invalid US number: ${phoneInput}`;
         resultDiv.style.color = 'red';
-    }
-
-    if (exactMatch) {
-        resultDiv.textContent = `Valid US number: ${exactMatch.formatted}`;
-    } else {
-        const invalidPatternExamples = [
-            /^555-5555$/,
-            /^5555555$/,
-            /^1\s\d{3}\)\d{3}-\d{4}$/,
-            /^123\*\*&!!asdf#$/,
-            /^55555555$/,
-            /^\(\d{10}\)$/,
-            /^2\s\(\d{3}\)\s\d{3}-\d{4}$/,
-            /^0\s\(\d{3}\)\s\d{3}-\d{4}$/,
-            /^-1\s\(\d{3}\)\s\d{3}-\d{4}$/,
-            /^2\s\d{3}\s\d{3}-\d{4}$/,
-            /^10\s\(\d{3}\)\s\d{3}-\d{4}$/,
-            /^\d{11}$/,
-            /^\(\d{3}\)\d{7}$/,
-            /^2\(\d{3}\)\d{7}$/,
-            /^2\(\d{3}\)\d{3}-\d{4}$/,
-            /^\d{3}\)-\d{3}-\d{4}$/,
-            /^\(\d{3}-\d{3}-\d{4}$/,
-            /^\(\d{3}\)\d{1}\(\d{3}\?\)-\d{4}$/,
-            /^\d{2}\s\d{2}-\d{2}-\d{3}-\d{1}$/,
-            /^11\s\d{3}-\d{3}-\d{4}$/
-        ];
-
-        const isInvalid = invalidPatternExamples.some(pattern => pattern.test(phoneInput));
-
-        if (isInvalid) {
-            resultDiv.textContent = `Invalid US number: ${phoneInput}`;
-            resultDiv.style.color = 'red';
-        }
     }
 });
 
